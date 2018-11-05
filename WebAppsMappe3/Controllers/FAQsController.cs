@@ -35,32 +35,29 @@ namespace WebAppsMappe3.Controllers
             {
                 return BadRequest(ModelState);
             }
+            var faq = await _context.FAQ.FindAsync(id);
 
-            var fAQ = await _context.FAQ.FindAsync(id);
-
-            if (fAQ == null)
+            if (faq == null)
             {
                 return NotFound();
             }
-
-            return Ok(fAQ);
+            return Ok(faq);
         }
 
         // PUT: api/FAQs/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutFAQ([FromRoute] int id, [FromBody] FAQ fAQ)
+        public async Task<IActionResult> PutFAQ([FromRoute] int id, [FromBody] FAQ faq)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            if (id != fAQ.Id)
+            if (id != faq.Id)
             {
                 return BadRequest();
             }
-
-            _context.Entry(fAQ).State = EntityState.Modified;
+            _context.Entry(faq).State = EntityState.Modified;
 
             try
             {
@@ -77,23 +74,20 @@ namespace WebAppsMappe3.Controllers
                     throw;
                 }
             }
-
             return NoContent();
         }
 
         // POST: api/FAQs
         [HttpPost]
-        public async Task<IActionResult> PostFAQ([FromBody] FAQ fAQ)
+        public async Task<IActionResult> PostFAQ([FromBody] FAQ faq)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-
-            _context.FAQ.Add(fAQ);
+            _context.FAQ.Add(faq);
             await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetFAQ", new { id = fAQ.Id }, fAQ);
+            return CreatedAtAction("GetFAQ", new { id = faq.Id }, faq);
         }
 
         // DELETE: api/FAQs/5
@@ -105,16 +99,14 @@ namespace WebAppsMappe3.Controllers
                 return BadRequest(ModelState);
             }
 
-            var fAQ = await _context.FAQ.FindAsync(id);
-            if (fAQ == null)
+            var faq = await _context.FAQ.FindAsync(id);
+            if (faq == null)
             {
                 return NotFound();
             }
-
-            _context.FAQ.Remove(fAQ);
+            _context.FAQ.Remove(faq);
             await _context.SaveChangesAsync();
-
-            return Ok(fAQ);
+            return Ok(faq);
         }
 
         private bool FAQExists(int id)
