@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using WebAppsMappe3.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace WebAppsMappe3
 {
@@ -21,7 +23,9 @@ namespace WebAppsMappe3
 		public void ConfigureServices(IServiceCollection services)
 		{
 			services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
-
+			var connection = @"Server=(localdb)\mssqllocaldb;Database=EFGetStarted.AspNetCore.NewDb;Trusted_Connection=True;ConnectRetryCount=0";
+			services.AddDbContext<DB>
+				(options => options.UseSqlServer(connection));
 			// In production, the React files will be served from this directory
 			services.AddSpaStaticFiles(configuration =>
 			{
