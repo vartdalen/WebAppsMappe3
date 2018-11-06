@@ -10,8 +10,7 @@ namespace WebAppsMappe3.Models
 	public class DB : DbContext
 	{
 		public DB(DbContextOptions<DB> options)
-					: base(options)
-		{ }
+					: base(options) { }
 
 		public DbSet<FAQ> FAQ { get; set; }
 	}
