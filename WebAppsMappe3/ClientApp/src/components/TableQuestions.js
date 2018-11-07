@@ -6,17 +6,21 @@ export class TableQuestions extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			faqs: [],
+			questions: [],
 			loading: true
 		};
+		this.fetchQuestionsTable();
+	}
+
+	fetchQuestionsTable() {
 		fetch('api/Questions')
 			.then(response => response.json())
 			.then(data => {
-				this.setState({ faqs: data, loading: false });
+				this.setState({ questions: data, loading: false });
 			});
 	}
 
-	static renderQuestionsTable(faqs) {
+	static renderQuestionsTable(questions) {
 		return (
 			<table className='table'>
 				<thead>
@@ -30,14 +34,14 @@ export class TableQuestions extends Component {
 					</tr>
 				</thead>
 				<tbody>
-					{faqs.map((faq, index )=>
+					{questions.map((question, index) =>
 						<tr key={index}>
 							<td>{index}</td>
-							<td>{faq.id}</td>
-							<td>{faq.question}</td>
-							<td>{faq.answer}</td>
-							<td>{faq.voteUp}</td>
-							<td>{faq.voteDown}</td>
+							<td>{question.id}</td>
+							<td>{question.question}</td>
+							<td>{question.answer}</td>
+							<td>{question.voteUp}</td>
+							<td>{question.voteDown}</td>
 						</tr>
 					)}
 				</tbody>
@@ -48,8 +52,7 @@ export class TableQuestions extends Component {
 	render() {
 		let contents = this.state.loading
 		? <p><em>Loading...</em></p>
-		: TableQuestions.renderQuestionsTable(this.state.faqs);
-
+		: TableQuestions.renderQuestionsTable(this.state.questions);
 		return (
 			<div>
 				{contents}
