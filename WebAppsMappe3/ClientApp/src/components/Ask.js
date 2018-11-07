@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { TableQuestions } from './TableQuestions';
 
 export class Ask extends Component {
 	displayName = Ask.name
@@ -40,27 +41,23 @@ export class Ask extends Component {
 		const question = this.state.question;
 		array.push({ question });
 		this.setState({ questionArray: array });
-		alert(JSON.stringify(this.state.questionArray));
 	}
 
 	submitQuestion(event) {
 		event.preventDefault();
 
-		fetch('api/FAQs', {
+		fetch('api/Questions', {
 			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json'
-			},
-			body: JSON.stringify({
-				'question': this.state.question
-			})
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify({ 'question': this.state.question })
 		})
 	}
 
 	render() {
 		return (
 			<div>
-				<h1>FAQ</h1>
+				<h1>Ask</h1>
+				<TableQuestions />
 				<p>Real Time Question: <strong>{this.state.question}</strong></p>
 				<p>On Click Question: <strong>{this.state.questionOnClick}</strong></p>
 				<p>Upvotes: <strong>{this.state.voteUp - this.state.voteDown}</strong></p>

@@ -28,13 +28,28 @@ namespace WebAppsMappe3.Migrations
 
                     b.Property<string>("question");
 
+                    b.HasKey("Id");
+
+                    b.ToTable("FAQ");
+                });
+
+            modelBuilder.Entity("WebAppsMappe3.Models.Question", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("answer");
+
+                    b.Property<string>("question");
+
                     b.Property<int>("voteDown");
 
                     b.Property<int>("voteUp");
 
                     b.HasKey("Id");
 
-                    b.ToTable("FAQ");
+                    b.ToTable("Question");
                 });
 #pragma warning restore 612, 618
         }

@@ -1,7 +1,7 @@
 ﻿import React, { Component } from 'react';
 
-export class FAQ extends Component {
-	displayName = FAQ.name
+export class TableQuestions extends Component {
+	displayName = TableQuestions.name
 
 	constructor(props) {
 		super(props);
@@ -9,18 +9,20 @@ export class FAQ extends Component {
 			faqs: [],
 			loading: true
 		};
-		fetch('api/FAQs')
+		fetch('api/Questions')
 			.then(response => response.json())
 			.then(data => {
 				this.setState({ faqs: data, loading: false });
 			});
 	}
 
-	static renderFAQsTable(faqs) {
+	static renderQuestionsTable(faqs) {
 		return (
 			<table className='table'>
 				<thead>
 					<tr>
+						<th>Array Index</th>
+						<th>DB Index</th>
 						<th>Question</th>
 						<th>Answer</th>
 						<th>Upvotes</th>
@@ -28,8 +30,10 @@ export class FAQ extends Component {
 					</tr>
 				</thead>
 				<tbody>
-					{faqs.map(faq =>
-						<tr key={faq.Id}>
+					{faqs.map((faq, index )=>
+						<tr key={index}>
+							<td>{index}</td>
+							<td>{faq.id}</td>
 							<td>{faq.question}</td>
 							<td>{faq.answer}</td>
 							<td>{faq.voteUp}</td>
@@ -44,11 +48,10 @@ export class FAQ extends Component {
 	render() {
 		let contents = this.state.loading
 		? <p><em>Loading...</em></p>
-		: FAQ.renderFAQsTable(this.state.faqs);
+		: TableQuestions.renderQuestionsTable(this.state.faqs);
 
 		return (
 			<div>
-				<h1>FAQ</h1>
 				{contents}
 			</div>
 		);

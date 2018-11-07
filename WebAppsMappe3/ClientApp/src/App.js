@@ -3,7 +3,7 @@ import { Route } from 'react-router';
 import { Layout } from './components/Layout';
 import { Home } from './components/Home';
 import { Ask } from './components/Ask';
-import { FAQ } from './components/FAQ';
+import { TableQuestions } from './components/TableQuestions';
 
 export default class App extends Component {
   displayName = App.name
@@ -12,8 +12,8 @@ export default class App extends Component {
     return (
       <Layout>
         <Route exact path='/' component={Home} />
-		<Route path='/ask' component={Ask} />
-		<Route path='/faq' component={FAQ} />
+			<Route path='/ask' component={Ask} />
+			<Route path='/faq' component={Ask} />
       </Layout>
     );
   }

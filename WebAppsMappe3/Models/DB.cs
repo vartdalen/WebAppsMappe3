@@ -12,5 +12,6 @@ namespace WebAppsMappe3.Models
 		public DB(DbContextOptions<DB> options) : base(options) { }
 
 		public DbSet<FAQ> FAQ { get; set; }
+		public DbSet<Question> Question { get; set; }
 	}
 }

@@ -23,7 +23,7 @@ namespace WebAppsMappe3
 		public void ConfigureServices(IServiceCollection services)
 		{
 			services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
-			var connection = @"Server=(localdb)\mssqllocaldb;Database=EFGetStarted.AspNetCore.NewDb;Trusted_Connection=True;ConnectRetryCount=0";
+			var connection = @"Server=(localdb)\mssqllocaldb;Database=FAQsDB;Trusted_Connection=True;ConnectRetryCount=0";
 			services.AddDbContext<DB>
 				(options => options.UseSqlServer(connection));
 			// In production, the React files will be served from this directory
