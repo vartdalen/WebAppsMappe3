@@ -7,12 +7,10 @@ export class Ask extends Component {
 		super(props);
 		this.state = {
 			question: '',
-			voteUp: 0,
-			voteDown: 0,
 			questions: [],
 			loading: true
 		};
-		this.insertQuestion = this.insertQuestion.bind(this);
+		this.insertQuestionToInput = this.insertQuestionToInput.bind(this);
 		this.insertQuestionState = this.insertQuestionState.bind(this);
 		this.submitQuestion = this.submitQuestion.bind(this);
 		this.voteUp = this.voteUp.bind(this);
@@ -21,18 +19,17 @@ export class Ask extends Component {
 		this.fetchQuestionsTable();
 	}
 
-	voteUp() {
+	voteUp(id) {
 		this.setState({
-			voteUp: this.state.voteUp + 1
 		});
+		this.state.questions[id].voteUp += 1;
 	}
 	voteDown() {
 		this.setState({
-			voteDown: this.state.voteDown + 1
 		});
 	}
 
-	insertQuestion(event) {
+	insertQuestionToInput(event) {
 		this.setState({ question: event.target.value });
 	}
 
@@ -61,61 +58,65 @@ export class Ask extends Component {
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json' },
 			body: JSON.stringify({ 'question': this.state.question })
-		})
-		this.fetchQuestionsTable();
-	}
-
-	static renderQuestionsTable(questions) {
-		return (
-			<table className='table'>
-				<thead>
-					<tr>
-						<th>Array Index</th>
-						<th>DB Index</th>
-						<th>Question</th>
-						<th>Answer</th>
-						<th>Upvotes</th>
-						<th>Downvotes</th>
-					</tr>
-				</thead>
-				<tbody>
-					{questions.map((question, index) =>
-						<tr key={index}>
-							<td>{index}</td>
-							<td>{question.id}</td>
-							<td>{question.question}</td>
-							<td>{question.answer}</td>
-							<td>{question.voteUp}</td>
-							<td>{question.voteDown}</td>
-						</tr>
-					)}
-				</tbody>
-			</table>
-		);
+		}).then(() => this.fetchQuestionsTable());
 	}
 
 	render() {
 		let contents = this.state.loading
-			? <p><em>Loading...</em></p>
-			: Ask.renderQuestionsTable(this.state.questions);
-		return (
-		<div>
-			<h1>Ask</h1>
-			<div>
-				{contents}
-			</div>
-			<p>Real Time Question: <strong>{this.state.question}</strong></p>
-			<p>On Click Question: <strong>{this.state.questionOnClick}</strong></p>
-			<p>Upvotes: <strong>{this.state.voteUp - this.state.voteDown}</strong></p>
-			<form onSubmit={this.submitQuestion}>
-				<input type="text" name="question" placeholder="Insert question here" value={this.state.question} onChange={this.insertQuestion} />
-				<input type="submit" value="Submit" />
-			</form>
+		if (contents) { return (<p><em>Loading...</em></p>); }
+		else {
+			return (
+				<div>
+					<h1>Ask</h1>
+					<div>
+						<table className='table'>
+							<thead>
+								<tr>
+									<th>Votes</th>
+									<th>Array Index</th>
+									<th>DB Index</th>
+									<th>Question</th>
+									<th>Answer</th>
+									<th>Upvotes</th>
+									<th>Downvotes</th>
+								</tr>
+							</thead>
+							<tbody>
+								{this.state.questions.map((question, index) =>
+									<tr key={index}>
+										<td class="vote" data-reactid=".0.1:$2.0">
+											<div class="vote-icons" data-reactid=".0.1:$2.0.1">
+												<div class="upvote" data-reactid=".0.1:$2.0.1.0">
+													<i onClick={() => { this.voteUp(index) }} class="glyphicon glyphicon-chevron-up" data-reactid=".0.1:$2.0.1.0.0"></i>
+												</div>
+												<span class="upvote-count" data-reactid=".0.1:$2.0.2">{question.voteUp - question.voteDown}</span>
+												<div class="downvote" data-reactid=".0.1:$2.0.1.1">
+													<i class="glyphicon glyphicon-chevron-down" data-reactid=".0.1:$2.0.1.1.0"></i>
+												</div>
+											</div>
+										</td>
+										<td>{index}</td>
+										<td>{question.id}</td>
+										<td>{question.question}</td>
+										<td>{question.answer}</td>
+										<td>{question.voteUp}</td>
+										<td>{question.voteDown}</td>
+									</tr>
+								)}
+							</tbody>
+						</table>
+					</div>
+					<p>Real Time Question: <strong>{this.state.question}</strong></p>
+					<p>On Click Question: <strong>{this.state.questionOnClick}</strong></p>
+					<form onSubmit={this.submitQuestion}>
+						<input type="text" name="question" placeholder="Insert question here" value={this.state.question} onChange={this.insertQuestionToInput} />
+						<input type="submit" value="Submit" />
+					</form>
 
-			<button onClick={this.voteUp}>Upvote</button>
-			<button onClick={this.voteDown}>Downvote</button>
-			<button onClick={this.insertQuestionState}>New Question</button>
-		</div>
-		);
+					<button onClick={this.voteUp}>Upvote</button>
+					<button onClick={this.insertQuestionState}>New Question</button>
+				</div>
+			);
+		}
 	}
 }
