@@ -19,14 +19,39 @@ export class Ask extends Component {
 		this.fetchQuestionsTable();
 	}
 
-	voteUp(id) {
-		this.setState({
-		});
-		this.state.questions[id].voteUp += 1;
+	voteUp(id, dbIndex) {
+		const questionsUpVoted = this.state.questions.slice()
+		questionsUpVoted[id].voteUp += 1
+
+		fetch('api/Questions/' + dbIndex, {
+			method: 'PUT',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify({
+				'id': dbIndex,
+				'question': questionsUpVoted[id].question,
+				'answer': questionsUpVoted[id].answer,
+				'voteUp': questionsUpVoted[id].voteUp,
+				'voteDown': questionsUpVoted[id].voteDown
+			})
+		})
+		this.setState({ questions: questionsUpVoted })
 	}
-	voteDown() {
-		this.setState({
-		});
+	voteDown(id, dbIndex) {
+		const questionsDownVoted = this.state.questions.slice()
+		questionsDownVoted[id].voteDown += 1
+
+		fetch('api/Questions/' + dbIndex, {
+			method: 'PUT',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify({
+				'id': dbIndex,
+				'question': questionsDownVoted[id].question,
+				'answer': questionsDownVoted[id].answer,
+				'voteUp': questionsDownVoted[id].voteUp,
+				'voteDown': questionsDownVoted[id].voteDown
+			})
+		})
+		this.setState({ questions: questionsDownVoted });
 	}
 
 	insertQuestionToInput(event) {
@@ -73,32 +98,32 @@ export class Ask extends Component {
 							<thead>
 								<tr>
 									<th>Votes</th>
-									<th>Array Index</th>
-									<th>DB Index</th>
 									<th>Question</th>
 									<th>Answer</th>
+									<!--<th>Array Index</th>
+									<th>DB Index</th>
 									<th>Upvotes</th>
-									<th>Downvotes</th>
+									<th>Downvotes</th>-->
 								</tr>
 							</thead>
 							<tbody>
 								{this.state.questions.map((question, index) =>
 									<tr key={index}>
-										<td class="vote" data-reactid=".0.1:$2.0">
-											<div class="vote-icons" data-reactid=".0.1:$2.0.1">
-												<div class="upvote" data-reactid=".0.1:$2.0.1.0">
-													<i onClick={() => { this.voteUp(index) }} class="glyphicon glyphicon-chevron-up" data-reactid=".0.1:$2.0.1.0.0"></i>
+										<td className="vote" data-reactid=".0.1:$2.0">
+											<div className="vote-icons" data-reactid=".0.1:$2.0.1">
+												<div className="upvote" data-reactid=".0.1:$2.0.1.0">
+													<i onClick={() => { this.voteUp(index, question.id) }} className="glyphicon glyphicon-chevron-up" data-reactid=".0.1:$2.0.1.0.0"></i>
 												</div>
-												<span class="upvote-count" data-reactid=".0.1:$2.0.2">{question.voteUp - question.voteDown}</span>
-												<div class="downvote" data-reactid=".0.1:$2.0.1.1">
-													<i class="glyphicon glyphicon-chevron-down" data-reactid=".0.1:$2.0.1.1.0"></i>
+												<span className="upvote-count" data-reactid=".0.1:$2.0.2">{question.voteUp - question.voteDown}</span>
+												<div className="downvote" data-reactid=".0.1:$2.0.1.1">
+													<i onClick={() => { this.voteDown(index, question.id) }} className="glyphicon glyphicon-chevron-down" data-reactid=".0.1:$2.0.1.1.0"></i>
 												</div>
 											</div>
 										</td>
-										<td>{index}</td>
-										<td>{question.id}</td>
 										<td>{question.question}</td>
 										<td>{question.answer}</td>
+										<td>{index}</td>
+										<td>{question.id}</td>
 										<td>{question.voteUp}</td>
 										<td>{question.voteDown}</td>
 									</tr>
