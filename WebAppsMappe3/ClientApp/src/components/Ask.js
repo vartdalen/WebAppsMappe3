@@ -100,10 +100,10 @@ export class Ask extends Component {
 									<th>Votes</th>
 									<th>Question</th>
 									<th>Answer</th>
-									<!--<th>Array Index</th>
+									<th>Array Index</th>
 									<th>DB Index</th>
 									<th>Upvotes</th>
-									<th>Downvotes</th>-->
+									<th>Downvotes</th>
 								</tr>
 							</thead>
 							<tbody>
