@@ -39,6 +39,7 @@ export class Ask extends Component {
 		})
 		this.setState({ questions: questionsUpVoted })
 	}
+
 	voteDown(index, dbIndex) {
 		const questionsDownVoted = this.state.questions.slice()
 		questionsDownVoted[index].voteDown += 1
@@ -145,35 +146,9 @@ export class Ask extends Component {
 									</div>
 								</div>
 							</div>
-							//<tr key={index}>
-							//	<td className="vote" data-reactid=".0.1:$2.0">
-							//		<div className="vote-icons" data-reactid=".0.1:$2.0.1">
-							//			<div className="upvote" data-reactid=".0.1:$2.0.1.0">
-							//				<i onClick={() => { this.voteUp(index, question.id) }} className="glyphicon glyphicon-chevron-up" data-reactid=".0.1:$2.0.1.0.0"></i>
-							//			</div>
-							//			<span className="upvote-count" data-reactid=".0.1:$2.0.2">{question.voteUp - question.voteDown}</span>
-							//			<div className="downvote" data-reactid=".0.1:$2.0.1.1">
-							//				<i onClick={() => { this.voteDown(index, question.id) }} className="glyphicon glyphicon-chevron-down" data-reactid=".0.1:$2.0.1.1.0"></i>
-							//			</div>
-							//		</div>
-							//	</td>
-							//	<td>{question.question}</td>
-							//	<td>{question.answer}</td>
-							//	<td>
-									//<form onSubmit={(e) => { this.submitAnswer(e, index, question.id) }}>
-									//	<input type="text" name="answer" placeholder="Insert answer here" value={this.state.answer} onChange={this.insertAnswerToInput} />
-									//	<input type="submit" value="Submit" />
-									//</form>
-							//	</td>
-							//	<td>{index}</td>
-							//	<td>{question.id}</td>
-							//	<td>{question.voteUp}</td>
-							//	<td>{question.voteDown}</td>
-							//</tr>
 						)}
 					</div>
 					<p>Real Time Question: <strong>{this.state.question}</strong></p>
-					<p>On Click Question: <strong>{this.state.questionOnClick}</strong></p>
 					<form onSubmit={this.submitQuestion}>
 						<input type="text" name="question" placeholder="Insert question here" value={this.state.question} onChange={this.insertQuestionToInput} />
 						<input type="submit" value="Submit" />
