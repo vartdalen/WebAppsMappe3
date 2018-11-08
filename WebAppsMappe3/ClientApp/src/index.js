@@ -1,5 +1,7 @@
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap/dist/css/bootstrap-theme.css';
+import 'jquery/src/jquery';
+import 'bootstrap/dist/js/bootstrap.min.js';
 import './index.css';
 import React from 'react';
 import ReactDOM from 'react-dom';

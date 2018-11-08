@@ -37,8 +37,6 @@ export class FAQ extends Component {
 	}
 
 	insertQuestionState() {
-		this.setState({ questionOnClick: this.state.question });
-
 		const array = this.state.questions;
 		const question = this.state.question;
 		array.push({ question });
