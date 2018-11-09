@@ -1,3 +1,29 @@
+/* FORM*/
+.div-highlight {
+	border-radius: 5px;
+	background-color: #f2f2f2;
+	padding: 1em;
+}
+
+.container-form {
+	box-shadow: 6px 6px 6px -6px black;
+	margin-bottom: 1em;
+}
+
+button[type=submit] {
+	width: 100%;
+	margin-top: 1em;
+}
+
+.button-delete {
+	width: initial;
+	height: 2em;
+}
+
+.vote-count {
+	margin-left:0.17em;
+}
+
 @media (max-width: 767px) {
     /* On small screens, the nav menu spans the full width of the screen. Leave a space for it. */
     body {
