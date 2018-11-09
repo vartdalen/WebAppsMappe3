@@ -122,9 +122,9 @@ export class Ask extends Component {
 
 	setupAnswer(replier) {
 		if (replier === '' || replier === null) {
-			return 'div-highlight, container-form, hidden';
+			return 'div-highlight container-form hidden';
 		} else {
-			return 'div-highlight, container-form, show';
+			return 'div-highlight container-form show';
 		}
 	}
 
