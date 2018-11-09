@@ -171,6 +171,7 @@ export class Ask extends Component {
 											{question.answer}
 										</div><br />
 										<form onSubmit={(e) => { this.submitAnswer(e, index, question.id) }}>
+											<label htmlFor="input-replier">Reply to question:</label><br />
 											<div className="input-group">
 												<div className="input-group-addon"><span className="glyphicon glyphicon-user" aria-hidden="true"></span></div>
 												<input className="form-control" type="text" name="replier" id="input-replier" placeholder="Insert name here" value={this.state.replier} onChange={this.insertReplierToInput} />
