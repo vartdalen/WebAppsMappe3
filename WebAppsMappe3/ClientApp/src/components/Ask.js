@@ -7,12 +7,16 @@ export class Ask extends Component {
 		super(props);
 		this.state = {
 			question: '',
+			asker: '',
 			answer: '',
+			replier: '',
 			questions: [],
 			loading: true
 		};
 		this.insertQuestionToInput = this.insertQuestionToInput.bind(this);
+		this.insertAskerToInput = this.insertAskerToInput.bind(this);
 		this.insertAnswerToInput = this.insertAnswerToInput.bind(this);
+		this.insertReplierToInput = this.insertReplierToInput.bind(this);
 		this.submitQuestion = this.submitQuestion.bind(this);
 		this.deleteQuestion = this.deleteQuestion.bind(this);
 		this.voteUp = this.voteUp.bind(this);
@@ -32,7 +36,9 @@ export class Ask extends Component {
 			body: JSON.stringify({
 				'id': dbIndex,
 				'question': questionsUpVoted[index].question,
+				'asker': questionsUpVoted[index].asker,
 				'answer': questionsUpVoted[index].answer,
+				'replier': questionsUpVoted[index].replier,
 				'voteUp': questionsUpVoted[index].voteUp,
 				'voteDown': questionsUpVoted[index].voteDown
 			})
@@ -50,7 +56,9 @@ export class Ask extends Component {
 			body: JSON.stringify({
 				'id': dbIndex,
 				'question': questionsDownVoted[index].question,
+				'asker': questionsDownVoted[index].asker,
 				'answer': questionsDownVoted[index].answer,
+				'replier': questionsDownVoted[index].replier,
 				'voteUp': questionsDownVoted[index].voteUp,
 				'voteDown': questionsDownVoted[index].voteDown
 			})
@@ -60,11 +68,10 @@ export class Ask extends Component {
 
 	submitQuestion(event) {
 		event.preventDefault();
-
 		fetch('api/Questions', {
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify({ 'question': this.state.question })
+			body: JSON.stringify({ 'question': this.state.question, 'asker': this.state.asker })
 		}).then(() => this.fetchQuestionsTable());
 	}
 
@@ -80,6 +87,7 @@ export class Ask extends Component {
 		event.preventDefault();
 		const questionsAnswered = this.state.questions.slice()
 		questionsAnswered[index].answer = this.state.answer
+		questionsAnswered[index].replier = this.state.replier
 
 		fetch('api/Questions/' + dbIndex, {
 			method: 'PUT',
@@ -87,7 +95,9 @@ export class Ask extends Component {
 			body: JSON.stringify({
 				'id': dbIndex,
 				'question': questionsAnswered[index].question,
+				'asker': questionsAnswered[index].asker,
 				'answer': questionsAnswered[index].answer,
+				'replier': questionsAnswered[index].replier,
 				'voteUp': questionsAnswered[index].voteUp,
 				'voteDown': questionsAnswered[index].voteDown
 			})
@@ -98,15 +108,31 @@ export class Ask extends Component {
 		this.setState({ question: event.target.value });
 	}
 
+	insertAskerToInput(event) {
+		this.setState({ asker: event.target.value });
+	}
+
 	insertAnswerToInput(event) {
 		this.setState({ answer: event.target.value });
+	}
+
+	insertReplierToInput(event) {
+		this.setState({ replier: event.target.value });
+	}
+
+	setupAnswer(replier) {
+		if (replier === '' || replier === null) {
+			return 'div-highlight, container-form, hidden';
+		} else {
+			return 'div-highlight, container-form, show';
+		}
 	}
 
 	fetchQuestionsTable() {
 		fetch('api/Questions')
 			.then(response => response.json())
 			.then(data => {
-				this.setState({ questions: data, loading: false, answer: '' });
+				this.setState({ questions: data, loading: false, question: '', asker: '', answer: '', replier: ''});
 			});
 	}
 
@@ -127,7 +153,8 @@ export class Ask extends Component {
 										</div>
 										<div className="vote-count col-sm-1" data-reactid=".0.1:$2.0.2">{question.voteUp - question.voteDown}</div>
 										<div className="panel-title col-sm-10">
-											<a role="button" data-toggle="collapse" data-parent="#accordion" href={'#collapse' + index} aria-expanded="false" aria-controls="collapseOne">
+											<label htmlFor="question">{question.asker}'s question: &nbsp;</label>
+											<a id ="question" role="button" data-toggle="collapse" data-parent="#accordion" href={'#collapse' + index} aria-expanded="false" aria-controls="collapseOne">
 												{question.question}
 											</a>
 										</div>
@@ -139,14 +166,18 @@ export class Ask extends Component {
 								</div>
 								<div id={'collapse' + index} className="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
 									<div className="panel-body">
-										<div className="div-highlight container-form">
-											<label htmlFor="input-answer">Answer:</label><br />
+										<div className={this.setupAnswer(question.replier)}>
+											<label htmlFor="answer">{question.replier}'s reply: </label><br />
 											{question.answer}
 										</div><br />
 										<form onSubmit={(e) => { this.submitAnswer(e, index, question.id) }}>
 											<div className="input-group">
+												<div className="input-group-addon"><span className="glyphicon glyphicon-user" aria-hidden="true"></span></div>
+												<input className="form-control" type="text" name="replier" id="input-replier" placeholder="Insert name here" value={this.state.replier} onChange={this.insertReplierToInput} />
+											</div><br />
+											<div className="input-group">
 												<div className="input-group-addon"><span className="glyphicon glyphicon-info-sign" aria-hidden="true"></span></div>
-												<input type="text" className="form-control" name="answer" id="input-answer" placeholder="Insert answer here" value={this.state.answer} onChange={this.insertAnswerToInput} />
+												<input type="text" className="form-control" name="answer" id="answer" placeholder="Insert answer here" value={this.state.answer} onChange={this.insertAnswerToInput} />
 											</div>
 											<button type="submit" className="btn btn-primary">Submit</button>
 										</form>
@@ -156,7 +187,11 @@ export class Ask extends Component {
 						)}
 					</div>
 					<form className="panel-body div-highlight container-form" onSubmit={this.submitQuestion}>
-						<label htmlFor="input-question">Ask a question:</label><br />
+						<label htmlFor="input-asker">Ask a question:</label><br />
+						<div className="input-group">
+							<div className="input-group-addon"><span className="glyphicon glyphicon-user" aria-hidden="true"></span></div>
+							<input className="form-control" type="text" name="asker" id="input-asker" placeholder="Insert name here" value={this.state.asker} onChange={this.insertAskerToInput} />
+						</div><br />
 						<div className="input-group">
 							<div className="input-group-addon"><span className="glyphicon glyphicon-question-sign" aria-hidden="true"></span></div>
 							<input className="form-control" type="text" name="question" id="input-question" placeholder="Insert question here" value={this.state.question} onChange={this.insertQuestionToInput} />

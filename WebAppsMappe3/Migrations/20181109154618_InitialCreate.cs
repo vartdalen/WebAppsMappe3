@@ -28,7 +28,9 @@ namespace WebAppsMappe3.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     question = table.Column<string>(nullable: true),
+                    asker = table.Column<string>(nullable: true),
                     answer = table.Column<string>(nullable: true),
+                    replier = table.Column<string>(nullable: true),
                     voteUp = table.Column<int>(nullable: false),
                     voteDown = table.Column<int>(nullable: false)
                 },

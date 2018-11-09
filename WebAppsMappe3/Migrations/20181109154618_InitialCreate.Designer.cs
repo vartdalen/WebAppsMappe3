@@ -9,7 +9,7 @@ using WebAppsMappe3.Models;
 namespace WebAppsMappe3.Migrations
 {
     [DbContext(typeof(DB))]
-    [Migration("20181107145602_InitialCreate")]
+    [Migration("20181109154618_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -43,7 +43,11 @@ namespace WebAppsMappe3.Migrations
 
                     b.Property<string>("answer");
 
+                    b.Property<string>("asker");
+
                     b.Property<string>("question");
+
+                    b.Property<string>("replier");
 
                     b.Property<int>("voteDown");
 
