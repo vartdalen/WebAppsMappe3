@@ -26,6 +26,8 @@ export class Ask extends Component {
 		this.insertReplierToInput = this.insertReplierToInput.bind(this);
 		this.validateName = this.validateName.bind(this);
 		this.validateSentence = this.validateSentence.bind(this);
+		this.validateForm = this.validateForm.bind(this);
+		this.setValidationIcon = this.setValidationIcon.bind(this);
 		this.voteUp = this.voteUp.bind(this);
 		this.voteDown = this.voteDown.bind(this);
 
@@ -42,11 +44,13 @@ export class Ask extends Component {
 
 	submitQuestion(event) {
 		event.preventDefault();
-		fetch('api/Questions', {
-			method: 'POST',
-			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify({ 'question': this.state.question, 'asker': this.state.asker })
-		}).then(() => this.fetchQuestionsTable());
+		if (this.validateForm(this.state.asker, this.state.question)) {
+			fetch('api/Questions', {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({ 'question': this.state.question, 'asker': this.state.asker })
+			}).then(() => this.fetchQuestionsTable());
+		}
 	}
 
 	deleteQuestion(dbIndex) {
@@ -59,23 +63,27 @@ export class Ask extends Component {
 
 	submitAnswer(event, index, dbIndex) {
 		event.preventDefault();
-		const questionsAnswered = this.state.questions.slice()
-		questionsAnswered[index].answer = this.state.answer
-		questionsAnswered[index].replier = this.state.replier
+		if (this.validateForm(this.state.replier, this.state.answer)) {
+			const questionsAnswered = this.state.questions.slice()
+			questionsAnswered[index].answer = this.state.answer
+			questionsAnswered[index].replier = this.state.replier
 
-		fetch('api/Questions/' + dbIndex, {
-			method: 'PUT',
-			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify({
-				'id': dbIndex,
-				'question': questionsAnswered[index].question,
-				'asker': questionsAnswered[index].asker,
-				'answer': questionsAnswered[index].answer,
-				'replier': questionsAnswered[index].replier,
-				'voteUp': questionsAnswered[index].voteUp,
-				'voteDown': questionsAnswered[index].voteDown
-			})
-		}).then(() => this.fetchQuestionsTable());
+			fetch('api/Questions/' + dbIndex, {
+				method: 'PUT',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({
+					'id': dbIndex,
+					'question': questionsAnswered[index].question,
+					'asker': questionsAnswered[index].asker,
+					'answer': questionsAnswered[index].answer,
+					'replier': questionsAnswered[index].replier,
+					'voteUp': questionsAnswered[index].voteUp,
+					'voteDown': questionsAnswered[index].voteDown
+				})
+			}).then(() => this.fetchQuestionsTable());
+		} else {
+			return false;
+		}
 	}
 
 	displayAnswer(replier) {
@@ -103,17 +111,44 @@ export class Ask extends Component {
 	}
 
 	validateName(name) {
-		var regex = new RegExp("^[A-Z]+(([',. -][A-Z])?[a-zA-Z]{1,15}){1,4}$");
+		var regex = new RegExp("^[A-Z]+(([',. -][A-Z])?[a-zA-Z.'-]{1,15}){1,5}$");
 		if (name.length < 1) return null;
 		if (regex.test(name)) return 'success';
 		else return 'error';
 	}
 
 	validateSentence(sentence) {
-		var regex = new RegExp("^[A-Za-z][^.:]*[.:]$");
+		var regex = new RegExp("^[A-Za-z][^,.:;'-_?!]*[.?!]$");
 		if (sentence.length < 1) return null;
 		if (regex.test(sentence)) return 'success';
 		else return 'error';
+	}
+
+	setValidationIcon(type, input) {
+		if (input.length < 1) {
+			return '';
+		}
+		if (type === 'name') {
+			if (this.validateName(input) === 'success') {
+				return 'glyphicon glyphicon-ok';
+			} else {
+				return 'glyphicon glyphicon-remove';
+			}
+		}
+		if (type === 'sentence') {
+			if (this.validateSentence(input) === 'success') {
+				return 'glyphicon glyphicon-ok';
+			} else {
+				return 'glyphicon glyphicon-remove';
+			}
+		}
+	}
+
+	validateForm(name, sentence) {
+		if (this.validateName(name) === 'success' && this.validateSentence(sentence) === 'success') {
+			return true;
+		}
+		return false;
 	}
 
 	voteUp(index, dbIndex) {
@@ -196,12 +231,14 @@ export class Ask extends Component {
 												<InputGroup>
 													<InputGroup.Addon><span className="glyphicon glyphicon-user"></span></InputGroup.Addon>
 													<FormControl type="text" name="replier" id="input-replier" placeholder="Insert name here" value={this.state.replier} onChange={this.insertReplierToInput} />
+													<span className={this.setValidationIcon('name', this.state.replier) + ' form-control-feedback'}></span>
 												</InputGroup>
 											</FormGroup>
 											<FormGroup validationState={this.validateSentence(this.state.answer)}>
 												<InputGroup>
 													<InputGroup.Addon><span className="glyphicon glyphicon-info-sign"></span></InputGroup.Addon>
-													<FormControl type="text" name="answer" id="input-answer" placeholder="Insert answer here" value={this.state.answer} onChange={this.insertAnswerToInput} />
+													<FormControl componentClass="textarea" name="answer" id="input-answer" placeholder="Insert answer here" value={this.state.answer} onChange={this.insertAnswerToInput} />
+													<span className={this.setValidationIcon('sentence', this.state.answer) + ' form-control-feedback'}></span>
 												</InputGroup>
 											</FormGroup>
 											<button type="submit" className="btn btn-primary">Submit answer</button>
@@ -217,12 +254,14 @@ export class Ask extends Component {
 							<InputGroup>
 								<InputGroup.Addon><span className="glyphicon glyphicon-user"></span></InputGroup.Addon>
 								<FormControl type="text" name="asker" id="input-asker" placeholder="Insert name here" value={this.state.asker} onChange={this.insertAskerToInput} />
+								<span className={this.setValidationIcon('name', this.state.asker) + ' form-control-feedback'}></span>
 							</InputGroup>
 						</FormGroup>
 						<FormGroup validationState={this.validateSentence(this.state.question)}>
 							<InputGroup>
 								<InputGroup.Addon><span className="glyphicon glyphicon-question-sign"></span></InputGroup.Addon>
-								<FormControl type="text" name="question" id="input-question" placeholder="Insert question here" value={this.state.question} onChange={this.insertQuestionToInput} />
+								<FormControl componentClass="textarea" name="question" id="input-question" placeholder="Insert question here" value={this.state.question} onChange={this.insertQuestionToInput} />
+								<span className={this.setValidationIcon('sentence', this.state.question) + ' form-control-feedback'}></span>
 							</InputGroup>
 						</FormGroup>
 						<button type="submit" className="btn btn-primary">Submit question</button>
