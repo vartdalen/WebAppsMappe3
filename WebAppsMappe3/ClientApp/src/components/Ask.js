@@ -171,7 +171,7 @@ export class Ask extends Component {
 											{question.answer}
 										</div><br />
 										<form onSubmit={(e) => { this.submitAnswer(e, index, question.id) }}>
-											<label htmlFor="input-replier">Reply to question:</label><br />
+											<label htmlFor="input-replier">Reply to {question.asker}:</label><br />
 											<div className="input-group">
 												<div className="input-group-addon"><span className="glyphicon glyphicon-user" aria-hidden="true"></span></div>
 												<input className="form-control" type="text" name="replier" id="input-replier" placeholder="Insert name here" value={this.state.replier} onChange={this.insertReplierToInput} />
@@ -180,7 +180,7 @@ export class Ask extends Component {
 												<div className="input-group-addon"><span className="glyphicon glyphicon-info-sign" aria-hidden="true"></span></div>
 												<input type="text" className="form-control" name="answer" id="answer" placeholder="Insert answer here" value={this.state.answer} onChange={this.insertAnswerToInput} />
 											</div>
-											<button type="submit" className="btn btn-primary">Submit</button>
+											<button type="submit" className="btn btn-primary">Submit answer</button>
 										</form>
 									</div>
 								</div>
@@ -197,7 +197,7 @@ export class Ask extends Component {
 							<div className="input-group-addon"><span className="glyphicon glyphicon-question-sign" aria-hidden="true"></span></div>
 							<input className="form-control" type="text" name="question" id="input-question" placeholder="Insert question here" value={this.state.question} onChange={this.insertQuestionToInput} />
 						</div>
-						<button type="submit" className="btn btn-primary">Submit</button>
+						<button type="submit" className="btn btn-primary">Submit question</button>
 					</form>
 				</div>
 			);

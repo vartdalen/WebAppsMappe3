@@ -9,7 +9,7 @@ using WebAppsMappe3.Models;
 namespace WebAppsMappe3.Migrations
 {
     [DbContext(typeof(DB))]
-    [Migration("20181109154618_InitialCreate")]
+    [Migration("20181111133245_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
