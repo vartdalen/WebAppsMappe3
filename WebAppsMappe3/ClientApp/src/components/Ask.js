@@ -27,7 +27,8 @@ export class Ask extends Component {
 		this.validateName = this.validateName.bind(this);
 		this.validateSentence = this.validateSentence.bind(this);
 		this.validateForm = this.validateForm.bind(this);
-		this.setValidationIcon = this.setValidationIcon.bind(this);
+		this.setFeedbackIcon = this.setFeedbackIcon.bind(this);
+		this.setFeedbackMessage = this.setFeedbackMessage.bind(this);
 		this.voteUp = this.voteUp.bind(this);
 		this.voteDown = this.voteDown.bind(this);
 
@@ -124,7 +125,7 @@ export class Ask extends Component {
 		else return 'error';
 	}
 
-	setValidationIcon(type, input) {
+	setFeedbackIcon(type, input) {
 		if (input.length < 1) {
 			return '';
 		}
@@ -140,6 +141,26 @@ export class Ask extends Component {
 				return 'glyphicon glyphicon-ok';
 			} else {
 				return 'glyphicon glyphicon-remove';
+			}
+		}
+	}
+
+	setFeedbackMessage(type, input) {
+		if (input.length < 1) {
+			return 'hidden';
+		}
+		if (type === 'name') {
+			if (this.validateName(input) === 'success') {
+				return 'hidden';
+			} else {
+				return '';
+			}
+		}
+		if (type === 'sentence') {
+			if (this.validateSentence(input) === 'success') {
+				return 'hidden';
+			} else {
+				return '';
 			}
 		}
 	}
@@ -197,7 +218,7 @@ export class Ask extends Component {
 		else {
 			return (
 				<div>
-					<h1>Ask</h1>
+					<h1>Ask us a question</h1>
 					<div className="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
 						{this.state.questions.map((question, index) =>
 							<div key={index} className="panel panel-default container-form">
@@ -231,15 +252,17 @@ export class Ask extends Component {
 												<InputGroup>
 													<InputGroup.Addon><span className="glyphicon glyphicon-user"></span></InputGroup.Addon>
 													<FormControl type="text" name="replier" id="input-replier" placeholder="Insert name here" value={this.state.replier} onChange={this.insertReplierToInput} />
-													<span className={this.setValidationIcon('name', this.state.replier) + ' form-control-feedback'}></span>
+													<span className={this.setFeedbackIcon('name', this.state.replier) + ' form-control-feedback'}></span>
 												</InputGroup>
+												<div className={this.setFeedbackMessage('name', this.state.replier) + ' help-block with-errors'}>First letter must be capitalized. Names must be longer than 1 letter. Characters available: ( a-zA-Z'.- )</div>
 											</FormGroup>
 											<FormGroup validationState={this.validateSentence(this.state.answer)}>
 												<InputGroup>
 													<InputGroup.Addon><span className="glyphicon glyphicon-info-sign"></span></InputGroup.Addon>
 													<FormControl componentClass="textarea" name="answer" id="input-answer" placeholder="Insert answer here" value={this.state.answer} onChange={this.insertAnswerToInput} />
-													<span className={this.setValidationIcon('sentence', this.state.answer) + ' form-control-feedback'}></span>
+													<span className={this.setFeedbackIcon('sentence', this.state.answer) + ' form-control-feedback'}></span>
 												</InputGroup>
+												<div className={this.setFeedbackMessage('sentence', this.state.answer) + ' help-block with-errors'}>Answers must end with ./?/!. Characters available: ( a-zA-Z,.:;'-_?! )</div>
 											</FormGroup>
 											<button type="submit" className="btn btn-primary">Submit answer</button>
 										</Form>
@@ -254,15 +277,17 @@ export class Ask extends Component {
 							<InputGroup>
 								<InputGroup.Addon><span className="glyphicon glyphicon-user"></span></InputGroup.Addon>
 								<FormControl type="text" name="asker" id="input-asker" placeholder="Insert name here" value={this.state.asker} onChange={this.insertAskerToInput} />
-								<span className={this.setValidationIcon('name', this.state.asker) + ' form-control-feedback'}></span>
+								<span className={this.setFeedbackIcon('name', this.state.asker) + ' form-control-feedback'}></span>
 							</InputGroup>
+							<div className={this.setFeedbackMessage('name', this.state.asker) + ' help-block with-errors'}>First letter must be capitalized. Names must be longer than 1 letter. Characters available: ( a-zA-Z'.- )</div>
 						</FormGroup>
 						<FormGroup validationState={this.validateSentence(this.state.question)}>
 							<InputGroup>
 								<InputGroup.Addon><span className="glyphicon glyphicon-question-sign"></span></InputGroup.Addon>
 								<FormControl componentClass="textarea" name="question" id="input-question" placeholder="Insert question here" value={this.state.question} onChange={this.insertQuestionToInput} />
-								<span className={this.setValidationIcon('sentence', this.state.question) + ' form-control-feedback'}></span>
+								<span className={this.setFeedbackIcon('sentence', this.state.question) + ' form-control-feedback'}></span>
 							</InputGroup>
+							<div className={this.setFeedbackMessage('sentence', this.state.question) + ' help-block with-errors'}>Questions must end with ./?/!. Characters available: ( a-zA-Z,.:;'-_?! )</div>
 						</FormGroup>
 						<button type="submit" className="btn btn-primary">Submit question</button>
 					</Form>
