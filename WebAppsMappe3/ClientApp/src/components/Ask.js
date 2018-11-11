@@ -119,7 +119,7 @@ export class Ask extends Component {
 	}
 
 	validateSentence(sentence) {
-		var regex = new RegExp("^[A-Za-z][^,.:;'-_?!]*[.?!]$");
+		var regex = new RegExp("^[A-Za-z ^,.:;'-_?!]{2,500}[.?!]$");
 		if (sentence.length < 1) return null;
 		if (regex.test(sentence)) return 'success';
 		else return 'error';
