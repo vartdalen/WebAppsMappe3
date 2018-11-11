@@ -12,17 +12,12 @@ export class NavMenu extends Component {
       <Navbar inverse fixedTop fluid collapseOnSelect>
         <Navbar.Header>
           <Navbar.Brand>
-            <Link to={'/'}>WebAppsMappe3</Link>
+            <Link to={'/ask'}>WebAppsMappe3</Link>
           </Navbar.Brand>
           <Navbar.Toggle />
         </Navbar.Header>
         <Navbar.Collapse>
           <Nav>
-            <LinkContainer to={'/'} exact>
-              <NavItem>
-                <Glyphicon glyph='home' /> Home
-              </NavItem>
-            </LinkContainer>
             <LinkContainer to={'/ask'}>
               <NavItem>
                 <Glyphicon glyph='question-sign' /> Ask

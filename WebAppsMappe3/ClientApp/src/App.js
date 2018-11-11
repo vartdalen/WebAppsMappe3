@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { Route } from 'react-router';
 import { Layout } from './components/Layout';
-import { Home } from './components/Home';
 import { Ask } from './components/Ask';
 import { FAQ } from './components/FAQ';
 
@@ -11,9 +10,8 @@ export default class App extends Component {
   render() {
     return (
       <Layout>
-        <Route exact path='/' component={Home} />
-			<Route path='/ask' component={Ask} />
-			<Route path='/faq' component={FAQ} />
+		<Route path='/ask' component={Ask} />
+		<Route path='/faq' component={FAQ} />
       </Layout>
     );
   }
