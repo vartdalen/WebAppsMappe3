@@ -103,19 +103,17 @@ export class Ask extends Component {
 	}
 
 	validateName(name) {
-		const length = name.value.length;
-		if (length > 10) return 'success';
-		else if (length > 5) return 'warning';
-		else if (length > 0) return 'error';
-		return null;
+		var regex = new RegExp("^[A-Z]+(([',. -][A-Z])?[a-zA-Z]{1,15}){1,4}$");
+		if (name.length < 1) return null;
+		if (regex.test(name)) return 'success';
+		else return 'error';
 	}
 
 	validateSentence(sentence) {
-		const length = sentence.value.length;
-		if (length > 10) return 'success';
-		else if (length > 5) return 'warning';
-		else if (length > 0) return 'error';
-		return null;
+		var regex = new RegExp("^[A-Za-z][^.:]*[.:]$");
+		if (sentence.length < 1) return null;
+		if (regex.test(sentence)) return 'success';
+		else return 'error';
 	}
 
 	voteUp(index, dbIndex) {
@@ -170,37 +168,37 @@ export class Ask extends Component {
 							<div key={index} className="panel panel-default container-form">
 								<div className="panel-heading" role="tab" id={'heading' + index}>
 									<div className="row" data-reactid=".0.1:$2.0.1">
-										<div className="upvote col-sm-12" data-reactid=".0.1:$2.0.1.0">
+										<div className="upvote col-xs-10" data-reactid=".0.1:$2.0.1.0">
 											<i onClick={() => { this.voteUp(index, question.id) }} className="glyphicon glyphicon-chevron-up" data-reactid=".0.1:$2.0.1.0.0"></i>
 										</div>
-										<div className="vote-count col-sm-1" data-reactid=".0.1:$2.0.2">{question.voteUp - question.voteDown}</div>
-										<div className="panel-title col-sm-10">
-											<label htmlFor="question">{question.asker}'s question: &nbsp;</label>
-											<a id ="question" role="button" data-toggle="collapse" data-parent="#accordion" href={'#collapse' + index} aria-expanded="false" aria-controls="collapseOne">
+										<button type="button" className="btn btn-danger col-xs-1 button-delete" onClick={() => { this.deleteQuestion(question.id) }}><span className="glyphicon glyphicon-trash"></span></button>
+										<div className="vote-count col-xs-12" data-reactid=".0.1:$2.0.2"><strong><h4>{question.voteUp - question.voteDown}</h4></strong></div>
+										<div className="downvote col-xs-1" data-reactid=".0.1:$2.0.1.1">
+											<i onClick={() => { this.voteDown(index, question.id) }} className="glyphicon glyphicon-chevron-down" data-reactid=".0.1:$2.0.1.1.0"></i>
+										</div>
+										<div className="panel-title col-xs-8">
+											<h4><label htmlFor="question">{question.asker}'s question:</label></h4>
+											<a className="long-text" id ="question" role="button" data-toggle="collapse" data-parent="#accordion" href={'#collapse' + index} aria-expanded="false" aria-controls="collapseOne">
 												{question.question}
 											</a>
-										</div>
-										<button type="button" className="btn btn-danger col-sm-1 button-delete" onClick={() => { this.deleteQuestion(question.id) }}><span className="glyphicon glyphicon-trash"></span></button>
-										<div className="downvote col-sm-12" data-reactid=".0.1:$2.0.1.1">
-											<i onClick={() => { this.voteDown(index, question.id) }} className="glyphicon glyphicon-chevron-down" data-reactid=".0.1:$2.0.1.1.0"></i>
 										</div>
 									</div>
 								</div>
 								<div id={'collapse' + index} className="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
 									<div className="panel-body">
 										<div className={this.displayAnswer(question.replier)}>
-											<label htmlFor="answer">{question.replier}'s reply: </label><br />
+											<h4><label htmlFor="answer">{question.replier}'s reply:</label></h4>
 											{question.answer}
 										</div>
 										<Form onSubmit={(e) => { this.submitAnswer(e, index, question.id) }}>
 											<label htmlFor="input-replier">Reply to {question.asker}:</label><br />
-											<FormGroup validationState={() => { this.validateName(this.state.replier) }}>
+											<FormGroup validationState={this.validateName(this.state.replier)}>
 												<InputGroup>
 													<InputGroup.Addon><span className="glyphicon glyphicon-user"></span></InputGroup.Addon>
 													<FormControl type="text" name="replier" id="input-replier" placeholder="Insert name here" value={this.state.replier} onChange={this.insertReplierToInput} />
 												</InputGroup>
 											</FormGroup>
-											<FormGroup validationState={() => { this.validateSentence(this.state.answer) }}>
+											<FormGroup validationState={this.validateSentence(this.state.answer)}>
 												<InputGroup>
 													<InputGroup.Addon><span className="glyphicon glyphicon-info-sign"></span></InputGroup.Addon>
 													<FormControl type="text" name="answer" id="input-answer" placeholder="Insert answer here" value={this.state.answer} onChange={this.insertAnswerToInput} />
@@ -215,16 +213,16 @@ export class Ask extends Component {
 					</div>
 					<Form className="div-highlight container-form" onSubmit={this.submitQuestion}>
 						<label htmlFor="input-asker">Ask a question:</label><br />
-						<FormGroup>
+						<FormGroup validationState={this.validateName(this.state.asker)}>
 							<InputGroup>
 								<InputGroup.Addon><span className="glyphicon glyphicon-user"></span></InputGroup.Addon>
-								<FormControl type="text" name="asker" id="input-asker" placeholder="Insert name here" value={this.state.asker} onChange={this.insertAskerToInput} validationState={() => { this.validateName(this.state.asker) }}/>
+								<FormControl type="text" name="asker" id="input-asker" placeholder="Insert name here" value={this.state.asker} onChange={this.insertAskerToInput} />
 							</InputGroup>
 						</FormGroup>
-						<FormGroup>
+						<FormGroup validationState={this.validateSentence(this.state.question)}>
 							<InputGroup>
 								<InputGroup.Addon><span className="glyphicon glyphicon-question-sign"></span></InputGroup.Addon>
-								<FormControl type="text" name="question" id="input-question" placeholder="Insert question here" value={this.state.question} onChange={this.insertQuestionToInput} validationState={() => { this.validateSentence(this.state.question) }}/>
+								<FormControl type="text" name="question" id="input-question" placeholder="Insert question here" value={this.state.question} onChange={this.insertQuestionToInput} />
 							</InputGroup>
 						</FormGroup>
 						<button type="submit" className="btn btn-primary">Submit question</button>

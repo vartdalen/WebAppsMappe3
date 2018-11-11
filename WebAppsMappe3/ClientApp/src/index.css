@@ -2,12 +2,12 @@
 .div-highlight {
 	border-radius: 5px;
 	background-color: #f2f2f2;
-	padding: 1em;
+	padding: 2em;
 }
 
 .container-form {
 	box-shadow: 6px 6px 6px -6px black;
-	margin-bottom: 1em;
+	margin-bottom: 1.5em;
 }
 
 button[type=submit] {
@@ -18,10 +18,22 @@ button[type=submit] {
 .button-delete {
 	width: initial;
 	height: 2em;
+	float:right;
+	margin-right:2em;
 }
 
 .vote-count {
-	margin-left:0.17em;
+	margin-left:0.1em;
+	margin-bottom:0.6em;
+}
+
+.long-text {
+	word-wrap: break-word;
+	margin-bottom: 10em;
+}
+
+.panel-title {
+	margin-top:-5em;
 }
 
 @media (max-width: 767px) {
