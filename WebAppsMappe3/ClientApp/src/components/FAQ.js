@@ -6,113 +6,65 @@ export class FAQ extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			question: '',
-			voteUp: 0,
-			voteDown: 0,
 			questions: [],
 			loading: true
 		};
-		this.insertQuestion = this.insertQuestion.bind(this);
-		this.insertQuestionState = this.insertQuestionState.bind(this);
-		this.submitQuestion = this.submitQuestion.bind(this);
-		this.voteUp = this.voteUp.bind(this);
-		this.voteDown = this.voteDown.bind(this);
 		this.fetchQuestionsTable = this.fetchQuestionsTable.bind(this);
+		this.deleteQuestion = this.deleteQuestion.bind(this);
+
 		this.fetchQuestionsTable();
 	}
 
-	voteUp() {
-		this.setState({
-			voteUp: this.state.voteUp + 1
-		});
-	}
-	voteDown() {
-		this.setState({
-			voteDown: this.state.voteDown + 1
-		});
-	}
-
-	insertQuestion(event) {
-		this.setState({ question: event.target.value });
-	}
-
-	insertQuestionState() {
-		const array = this.state.questions;
-		const question = this.state.question;
-		array.push({ question });
-		this.setState({ questions: array });
-		alert(JSON.stringify(this.state.questions));
-	}
-
 	fetchQuestionsTable() {
-		fetch('api/Questions')
+		fetch('api/FAQs')
 			.then(response => response.json())
 			.then(data => {
-				this.setState({ questions: data, loading: false });
+				this.setState({ questions: data, loading: false});
 			});
 	}
 
-	submitQuestion(event) {
-		event.preventDefault();
-
-		fetch('api/Questions', {
-			method: 'POST',
+	deleteQuestion(dbIndex) {
+		fetch('api/FAQs/' + dbIndex, {
+			method: 'DELETE',
 			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify({ 'question': this.state.question })
+			body: JSON.stringify({ 'id': dbIndex })
 		}).then(() => this.fetchQuestionsTable());
-	}
-
-	static renderQuestionsTable(questions) {
-		return (
-			<table className='table'>
-				<thead>
-					<tr>
-						<th>Array Index</th>
-						<th>DB Index</th>
-						<th>Question</th>
-						<th>Answer</th>
-						<th>Upvotes</th>
-						<th>Downvotes</th>
-					</tr>
-				</thead>
-				<tbody>
-					{questions.map((question, index) =>
-						<tr key={index}>
-							<td>{index}</td>
-							<td>{question.id}</td>
-							<td>{question.question}</td>
-							<td>{question.answer}</td>
-							<td>{question.voteUp}</td>
-							<td>{question.voteDown}</td>
-						</tr>
-					)}
-				</tbody>
-			</table>
-		);
 	}
 
 	render() {
 		let contents = this.state.loading
-			? <p><em>Loading...</em></p>
-			: FAQ.renderQuestionsTable(this.state.questions);
-		return (
-			<div>
-				<h1>FAQ</h1>
+		if (contents) { return (<p><em>Loading...</em></p>); }
+		else {
+			return (
 				<div>
-					{contents}
+					<h1>FAQ</h1>
+					<div className="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+						{this.state.questions.map((question, index) =>
+							<div key={index} className="panel panel-default container-form">
+								<div className="panel-heading" role="tab" id={'heading' + index}>
+									<div className="row" data-reactid=".0.1:$2.0.1">
+										<button type="button" className="btn btn-danger col-xs-1 button-delete" onClick={() => { this.deleteQuestion(question.id) }}><span className="glyphicon glyphicon-trash"></span></button>
+										<div className="panel-title col-xs-8">
+											<h4><label htmlFor="question">Question:</label></h4>
+											<a className="long-text" id="question" role="button" data-toggle="collapse" data-parent="#accordion" href={'#collapse' + index} aria-expanded="false" aria-controls="collapseOne">
+												{question.question}
+											</a>
+										</div>
+									</div>
+								</div>
+								<div id={'collapse' + index} className="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+									<div className="panel-body">
+										<div className="div-highlight">
+											<h4><label htmlFor="answer">Answer:</label></h4>
+											{question.answer}
+										</div>
+									</div>
+								</div>
+							</div>
+						)}
+					</div>
 				</div>
-				<p>Real Time Question: <strong>{this.state.question}</strong></p>
-				<p>On Click Question: <strong>{this.state.questionOnClick}</strong></p>
-				<p>Upvotes: <strong>{this.state.voteUp - this.state.voteDown}</strong></p>
-				<form onSubmit={this.submitQuestion}>
-					<input type="text" name="question" placeholder="Insert question here" value={this.state.question} onChange={this.insertQuestion} />
-					<input type="submit" value="Submit" />
-				</form>
-
-				<button onClick={this.voteUp}>Upvote</button>
-				<button onClick={this.voteDown}>Downvote</button>
-				<button onClick={this.insertQuestionState}>New Question</button>
-			</div>
-		);
+			);
+		}
 	}
 }

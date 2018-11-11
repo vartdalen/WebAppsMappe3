@@ -31,8 +31,8 @@ button[type=submit] {
 	word-wrap: break-word;
 }
 
-.panel-title {
-	margin-top:-5em;
+.ask-title {
+	margin-top: -5em;
 }
 
 @media (max-width: 767px) {

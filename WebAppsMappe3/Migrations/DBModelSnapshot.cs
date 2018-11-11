@@ -31,6 +31,12 @@ namespace WebAppsMappe3.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("FAQ");
+
+                    b.HasData(
+                        new { Id = 1, answer = "Click the sign up button in the upper right corner of the screen.", question = "How do i create a user?" },
+                        new { Id = 2, answer = "Press the logout button.", question = "How can i sign out?" },
+                        new { Id = 3, answer = "No.", question = "Does this FAQ answer any legitimate questions?" }
+                    );
                 });
 
             modelBuilder.Entity("WebAppsMappe3.Models.Question", b =>

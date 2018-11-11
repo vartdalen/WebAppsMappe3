@@ -38,6 +38,21 @@ namespace WebAppsMappe3.Migrations
                 {
                     table.PrimaryKey("PK_Question", x => x.Id);
                 });
+
+            migrationBuilder.InsertData(
+                table: "FAQ",
+                columns: new[] { "Id", "answer", "question" },
+                values: new object[] { 1, "Click the sign up button in the upper right corner of the screen.", "How do i create a user?" });
+
+            migrationBuilder.InsertData(
+                table: "FAQ",
+                columns: new[] { "Id", "answer", "question" },
+                values: new object[] { 2, "Press the logout button.", "How can i sign out?" });
+
+            migrationBuilder.InsertData(
+                table: "FAQ",
+                columns: new[] { "Id", "answer", "question" },
+                values: new object[] { 3, "No.", "Does this FAQ answer any legitimate questions?" });
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

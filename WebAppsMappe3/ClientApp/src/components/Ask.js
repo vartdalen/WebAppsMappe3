@@ -218,7 +218,7 @@ export class Ask extends Component {
 		else {
 			return (
 				<div>
-					<h1>Ask us a question</h1>
+					<h1>Ask</h1>
 					<div className="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
 						{this.state.questions.map((question, index) =>
 							<div key={index} className="panel panel-default container-form">
@@ -232,7 +232,7 @@ export class Ask extends Component {
 										<div className="downvote col-xs-1" data-reactid=".0.1:$2.0.1.1">
 											<i onClick={() => { this.voteDown(index, question.id) }} className="glyphicon glyphicon-chevron-down" data-reactid=".0.1:$2.0.1.1.0"></i>
 										</div>
-										<div className="panel-title col-xs-8">
+										<div className="panel-title ask-title col-xs-8">
 											<h4><label htmlFor="question">{question.asker}'s question:</label></h4>
 											<a className="long-text" id ="question" role="button" data-toggle="collapse" data-parent="#accordion" href={'#collapse' + index} aria-expanded="false" aria-controls="collapseOne">
 												{question.question}
