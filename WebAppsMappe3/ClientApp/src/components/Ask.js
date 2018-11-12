@@ -1,8 +1,5 @@
 import React, { Component } from 'react';
-import Form from 'react-bootstrap/lib/Form';
-import FormGroup from 'react-bootstrap/lib/FormGroup';
-import FormControl from 'react-bootstrap/lib/FormControl';
-import InputGroup from 'react-bootstrap/lib/InputGroup';
+import { Form, FormGroup, FormControl, InputGroup } from 'react-bootstrap/lib';
 
 export class Ask extends Component {
 	displayName = Ask.name
